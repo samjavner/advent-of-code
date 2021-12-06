@@ -80,36 +80,34 @@ const markBoard = (board: Board, draw: number): Board =>
 const markBoards = (boards: Board[], draw: number): Board[] =>
   boards.map((board) => markBoard(board, draw));
 
-const playRound = (rules: GameRules) => (
-  boards: Board[],
-  draw: number
-): GameState => {
-  const newBoards = markBoards(boards, draw);
-  const gameWinner = rules.isGameWon(newBoards, draw);
+const playRound =
+  (rules: GameRules) =>
+  (boards: Board[], draw: number): GameState => {
+    const newBoards = markBoards(boards, draw);
+    const gameWinner = rules.isGameWon(newBoards, draw);
 
-  return gameWinner
-    ? {
-        type: "winner",
-        board: gameWinner[0],
-        score: gameWinner[1],
-      }
-    : {
-        type: "play_on",
-        boards: rules.eliminateLosers(newBoards),
-      };
-};
+    return gameWinner
+      ? {
+          type: "winner",
+          board: gameWinner[0],
+          score: gameWinner[1],
+        }
+      : {
+          type: "play_on",
+          boards: rules.eliminateLosers(newBoards),
+        };
+  };
 
-const playGame = (rules: GameRules) => (
-  boards: Board[],
-  draws: number[]
-): GameState =>
-  draws.reduce<GameState>(
-    (gameState, draw) =>
-      gameState.type === "winner"
-        ? gameState
-        : playRound(rules)(gameState.boards, draw),
-    { type: "play_on", boards }
-  );
+const playGame =
+  (rules: GameRules) =>
+  (boards: Board[], draws: number[]): GameState =>
+    draws.reduce<GameState>(
+      (gameState, draw) =>
+        gameState.type === "winner"
+          ? gameState
+          : playRound(rules)(gameState.boards, draw),
+      { type: "play_on", boards }
+    );
 
 const rulesPart1: GameRules = {
   isGameWon: (boards, lastDraw) =>
@@ -130,5 +128,5 @@ const rulesPart2: GameRules = {
   eliminateLosers: (boards) => boards.filter(_.negate(isWinningBoard)),
 };
 
-console.log("part 1: %o", playGame(rulesPart1)(emptyBoards, draws)); // 46920
-console.log("part 2: %o", playGame(rulesPart2)(emptyBoards, draws)); // 12635
+console.log("part 1: %o", playGame(rulesPart1)(emptyBoards, draws));
+console.log("part 2: %o", playGame(rulesPart2)(emptyBoards, draws));

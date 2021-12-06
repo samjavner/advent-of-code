@@ -41,32 +41,32 @@ const getPowerConsumption = () => {
   return gammaRate * epsilonRate;
 };
 
-console.log("part 1: %d", getPowerConsumption()); // 1071734
+console.log("part 1: %d", getPowerConsumption());
 
 // PART 2
 
-const getBitCriteriaRating = (mode: "most" | "least", index = 0) => (
-  diagnostics: Diagnostic[]
-): number => {
-  const onesCount = getOnesCount(index, diagnostics);
+const getBitCriteriaRating =
+  (mode: "most" | "least", index = 0) =>
+  (diagnostics: Diagnostic[]): number => {
+    const onesCount = getOnesCount(index, diagnostics);
 
-  const bitCriteria =
-    onesCount >= diagnostics.length / 2
-      ? mode === "most"
-        ? 1
-        : 0
-      : mode === "most"
-      ? 0
-      : 1;
+    const bitCriteria =
+      onesCount >= diagnostics.length / 2
+        ? mode === "most"
+          ? 1
+          : 0
+        : mode === "most"
+        ? 0
+        : 1;
 
-  const relevantDiagnostics = diagnostics.filter(
-    (d) => d[index] === bitCriteria
-  );
+    const relevantDiagnostics = diagnostics.filter(
+      (d) => d[index] === bitCriteria
+    );
 
-  return relevantDiagnostics.length === 1
-    ? getRate(relevantDiagnostics[0])
-    : getBitCriteriaRating(mode, index + 1)(relevantDiagnostics);
-};
+    return relevantDiagnostics.length === 1
+      ? getRate(relevantDiagnostics[0])
+      : getBitCriteriaRating(mode, index + 1)(relevantDiagnostics);
+  };
 
 const getLifeSupportRating = () => {
   const getOxygenGeneratorRating = getBitCriteriaRating("most");
@@ -78,4 +78,4 @@ const getLifeSupportRating = () => {
   return oxygenGeneratorRating * co2ScrubberRating;
 };
 
-console.log("part 2: %d", getLifeSupportRating()); // 6124992
+console.log("part 2: %d", getLifeSupportRating());
